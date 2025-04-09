@@ -1,13 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Golf Card Game</title>
-</head>
 <body>
-  <h1>Golf Card Game</h1>
-  <div id="game"></div>
+  <h1>Jágó</h1>
+
+  <div id="login">
+    <h1>Jágó</h1>
+    <input type="text" id="playerName" placeholder="Enter your name" />
+    <button id="joinBtn">Join Game</button>
+  </div>
+
+  <div id="game" style="display: none;">
+    <p id="status">Waiting for other players...</p>
+    <!-- The game UI will go here -->
+  </div>
+
   <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
   <script src="script.js"></script>
 </body>
-</html>

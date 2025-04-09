@@ -1,14 +1,21 @@
-// Replace with your Render backend URL:
-const socket = io("https://jago-zsnx.onrender.com");
+const socket = io("https://your-render-url.onrender.com");
 
-socket.on("connect", () => {
-  console.log("Connected to server!", socket.id);
+const loginDiv = document.getElementById("login");
+const gameDiv = document.getElementById("game");
+const joinBtn = document.getElementById("joinBtn");
+const nameInput = document.getElementById("playerName");
+const statusText = document.getElementById("status");
 
-  // Example: Send a message to the server
-  socket.emit("message", "Hello from frontend!");
+joinBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (!name) return alert("Please enter a name");
+
+  socket.emit("joinGame", name);
+  loginDiv.style.display = "none";
+  gameDiv.style.display = "block";
+  statusText.textContent = "Waiting for other players...";
 });
 
-// Example: Handle broadcast messages
-socket.on("message", (msg) => {
-  console.log("Received:", msg);
+socket.on("gameStart", (players) => {
+  statusText.textContent = `Game started! Players: ${players.join(", ")}`;
 });

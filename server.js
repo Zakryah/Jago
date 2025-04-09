@@ -128,3 +128,31 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+const players = [];
+const MAX_PLAYERS = 4;
+
+io.on("connection", (socket) => {
+  console.log("A user connected:", socket.id);
+
+  socket.on("joinGame", (name) => {
+    if (players.length >= MAX_PLAYERS) return;
+
+    players.push({ id: socket.id, name });
+    console.log(`${name} joined the game.`);
+
+    if (players.length >= 2) {
+      // Start game once we have 2+ players
+      const playerNames = players.map(p => p.name);
+      io.emit("gameStart", playerNames);
+    }
+  });
+
+  socket.on("disconnect", () => {
+    const index = players.findIndex(p => p.id === socket.id);
+    if (index !== -1) {
+      const leftPlayer = players.splice(index, 1)[0];
+      console.log(`${leftPlayer.name} disconnected.`);
+    }
+  });
+});
